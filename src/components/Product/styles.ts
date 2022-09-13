@@ -63,21 +63,26 @@ export const SelectAmountInput = styled.div`
   background: ${(props) => props.theme['base-button']};
   display: flex;
   align-items: center;
-  padding: 0 0.5rem;
+  padding: 0;
   gap: 0.5rem;
   height: 2.375rem;
   border-radius: 6px;
 
-  svg {
+  button {
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+    line-height: 0;
     color: ${(props) => props.theme.purple};
     transition: color 0.2s;
     cursor: pointer;
     &:hover {
       color: ${(props) => props.theme['purple-dark']};
     }
-  }
-  span {
-    color: ${(props) => props.theme['base-title']};
+
+    span {
+      color: ${(props) => props.theme['base-title']};
+    }
   }
 `
 export const CartButton = styled.button`

@@ -4,8 +4,14 @@ import { Link } from 'react-router-dom'
 import { MapPin, ShoppingCart } from 'phosphor-react'
 
 import logoImg from '../../assets/logo.svg'
+import { useContext } from 'react'
+import { CartContext } from '../../context/CartContext/index.tsx'
 
 export function Header() {
+  const { cart } = useContext(CartContext)
+  const AmountItensInCart = cart?.reduce((acc, value) => {
+    return acc + value.amount
+  }, 0)
   return (
     <HeaderContainer>
       <Link to="./">
@@ -20,7 +26,7 @@ export function Header() {
           <Cart>
             <ShoppingCart size={22} weight="fill" />
             <div>
-              <span>2</span>
+              <span>{AmountItensInCart || 0}</span>
             </div>
           </Cart>
         </Link>
