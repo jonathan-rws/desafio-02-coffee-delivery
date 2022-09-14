@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useEffect, useState } from 'react'
 
 interface CartItem {
   id: number
@@ -18,14 +18,34 @@ export const CartContext = createContext({} as CartContextProps)
 
 export function CartContextProvider({ children }: CartContextProviderProps) {
   const [cart, setCart] = useState<CartItem[] | null>(null)
-
-  function addToCart(id: number, amount: number) {
-    if (cart) {
-      const newCart = [...cart, { id, amount }]
-      setCart(newCart)
-    } else {
-      setCart([{ id, amount }])
+  useEffect(() => {
+    async function getStorage() {
+      const data = await localStorage.getItem('deliveryCOffeeCartItems')
+      if (data) {
+        setCart(JSON.parse(data))
+      }
     }
+    getStorage()
+  }, [])
+  async function addToCart(id: number, amount: number) {
+    let newCart = []
+    if (!cart) {
+      newCart = [{ id, amount }]
+    } else {
+      const cartIndex = cart.findIndex((item) => item.id === id)
+      if (cartIndex !== -1) {
+        const cartArray = cart.map((item) => {
+          return item.id === id
+            ? { id: item.id, amount: item.amount + amount }
+            : item
+        })
+        newCart = cartArray
+      } else {
+        newCart = [...cart, { id, amount }]
+      }
+    }
+    localStorage.setItem('deliveryCOffeeCartItems', JSON.stringify(newCart))
+    setCart(newCart)
   }
   return (
     <CartContext.Provider value={{ cart, addToCart }}>
