@@ -1,6 +1,8 @@
-import { Minus, Plus, ShoppingCart } from 'phosphor-react'
+import { Minus, Plus, ShoppingCart, Spinner } from 'phosphor-react'
 import { useContext, useState } from 'react'
 import { CartContext } from '../../context/CartContext/index.tsx'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import {
   CartButton,
   Description,
@@ -31,6 +33,7 @@ export function Product({
   image,
 }: ProductProps) {
   const [productAmount, setProductAmount] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
   const { addToCart } = useContext(CartContext)
   function handleIncrementProductAmount() {
     if (inventory > productAmount) {
@@ -44,17 +47,22 @@ export function Product({
   }
 
   function handleAddTocart() {
+    setIsLoading(true)
     addToCart(id, productAmount)
+    setTimeout(() => setIsLoading(false), 1000)
     setProductAmount(1)
+    toast('produto adicionado ao carrinho')
   }
 
   return (
     <ProductContainer>
+      <ToastContainer />
       <img src={image} alt="" />
-
-      {tags.map((tag) => (
-        <TypeTag key={tag}>{tag}</TypeTag>
-      ))}
+      <div>
+        {tags.map((tag) => (
+          <TypeTag key={tag}>{tag}</TypeTag>
+        ))}
+      </div>
 
       <Title>{title}</Title>
       <Description>{description}</Description>
@@ -72,7 +80,11 @@ export function Product({
           </button>
         </SelectAmountInput>
         <CartButton onClick={handleAddTocart}>
-          <ShoppingCart size={22} weight="fill" />
+          {isLoading ? (
+            <Spinner size={22} weight="fill" className="loading" />
+          ) : (
+            <ShoppingCart size={22} weight="fill" />
+          )}
         </CartButton>
       </Footer>
     </ProductContainer>

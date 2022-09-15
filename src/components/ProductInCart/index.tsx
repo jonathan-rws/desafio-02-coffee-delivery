@@ -1,7 +1,15 @@
 import { Minus, Plus, Trash } from 'phosphor-react'
-import { AmountSection, CoffeeTitle, ProductInCartContainer } from './styles'
+import {
+  AmountSection,
+  CoffeeTitle,
+  IncrementAndDecrementBox,
+  ProductInCartContainer,
+  RemoveButton,
+} from './styles'
 
 import { products } from '../../products-db/products'
+import { useContext } from 'react'
+import { CartContext } from '../../context/CartContext/index.tsx'
 
 interface ProductInCartProps {
   id: number
@@ -9,6 +17,19 @@ interface ProductInCartProps {
 }
 
 export function ProductInCart({ id, amount }: ProductInCartProps) {
+  const { removeFromCart, incrementItemFromCart, decrementItemFromCart } =
+    useContext(CartContext)
+
+  function handleRemoveItemFromCart() {
+    removeFromCart(id)
+  }
+  function handleIncrementItemFromCart() {
+    incrementItemFromCart(id)
+  }
+  function handleDecrementItemFromCart() {
+    decrementItemFromCart(id)
+  }
+
   const product = products[products.findIndex((item) => item.id === id)]
 
   return (
@@ -17,13 +38,23 @@ export function ProductInCart({ id, amount }: ProductInCartProps) {
       <div>
         <CoffeeTitle>{product.title}</CoffeeTitle>
         <AmountSection>
-          <div>
-            <Minus size={16} className="disable" /> {amount} <Plus size={16} />
-          </div>
-          <button>
+          <IncrementAndDecrementBox>
+            <button
+              type="button"
+              disabled={amount <= 1}
+              onClick={handleDecrementItemFromCart}
+            >
+              <Minus size={16} />
+            </button>
+            {amount}
+            <button type="button" onClick={handleIncrementItemFromCart}>
+              <Plus size={16} />
+            </button>
+          </IncrementAndDecrementBox>
+          <RemoveButton type="button" onClick={handleRemoveItemFromCart}>
             <Trash size={16} />
             REMOVER
-          </button>
+          </RemoveButton>
         </AmountSection>
       </div>
       <strong>R${product.priceInCents / 100}</strong>

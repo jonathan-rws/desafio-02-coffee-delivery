@@ -42,7 +42,7 @@ export const ConfirmButton = styled.button`
   border: none;
   border-radius: 8px;
   background: ${(props) => props.theme.yellow};
-  padding: 0.75rem;
+  height: 3rem;
   color: ${(props) => props.theme.white};
   font-weight: 700;
   font-size: 0.875rem;
@@ -50,5 +50,17 @@ export const ConfirmButton = styled.button`
   cursor: pointer;
   &:hover {
     background: ${(props) => props.theme['yellow-dark']};
+  }
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  svg {
+    animation: spin 3s infinite linear;
   }
 `

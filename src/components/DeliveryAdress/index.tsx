@@ -7,24 +7,33 @@ import {
   DivForm,
 } from './styles'
 
-export function DevileveryAdress() {
-  const [currentCep, setCurrentCep] = useState('')
-  const [street, setStreet] = useState('')
-  const [district, setDistrict] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
+interface DeliveryAdressProps {
+  currentCep: string
+  setCurrentCep: (e: string) => void
+  street: string
+  setStreet: (e: string) => void
+  district: string
+  setDistrict: (e: string) => void
+  city: string
+  setCity: (e: string) => void
+  state: string
+  setState: (e: string) => void
+  number: string
+  setNumber: (e: string) => void
+}
 
+export function DevileveryAdress(props: DeliveryAdressProps) {
   const [streetInputIsActive, setStreetInputIsActive] = useState(false)
   const [districtInputIsActive, setDistrictInputIsActive] = useState(false)
   const [cityInputIsActive, setCityInputIsActive] = useState(false)
   const [stateInputIsActive, setStateInputIsActive] = useState(false)
 
   async function getAdress() {
-    const { data } = await cepApi(`${currentCep}/json`)
-    setCity(data.localidade)
-    setStreet(data.logradouro)
-    setDistrict(data.bairro)
-    setState(data.uf)
+    const { data } = await cepApi(`${props.currentCep}/json`)
+    props.setCity(data.localidade)
+    props.setStreet(data.logradouro)
+    props.setDistrict(data.bairro)
+    props.setState(data.uf)
     if (data.logradouro) {
       setStreetInputIsActive(true)
     }
@@ -40,20 +49,20 @@ export function DevileveryAdress() {
   }
 
   useEffect(() => {
-    if (currentCep.length === 8) {
+    if (props.currentCep.length === 8) {
       getAdress()
     }
-    if (currentCep.length < 8) {
-      setCity('')
-      setStreet('')
-      setDistrict('')
-      setState('')
+    if (props.currentCep.length < 8) {
+      props.setCity('')
+      props.setStreet('')
+      props.setDistrict('')
+      props.setState('')
       setStreetInputIsActive(false)
       setDistrictInputIsActive(false)
       setCityInputIsActive(false)
       setStateInputIsActive(false)
     }
-  }, [currentCep])
+  }, [props.currentCep])
   return (
     <DeliveryAddressContainer>
       <DeliveryAddressContent>
@@ -68,19 +77,24 @@ export function DevileveryAdress() {
           type="text"
           placeholder="CEP"
           className="addressCEP"
-          value={currentCep}
-          onChange={(e) => setCurrentCep(e.target.value)}
+          value={props.currentCep}
+          onChange={(e) => props.setCurrentCep(e.target.value)}
           maxLength={8}
         />
         <input
           disabled={streetInputIsActive}
           type="text"
           placeholder="Rua"
-          value={street}
-          onChange={(e) => setStreet(e.target.value)}
+          value={props.street}
+          onChange={(e) => props.setStreet(e.target.value)}
         />
         <DivForm>
-          <input type="text" placeholder="Número" className="addressNumber" />
+          <input
+            type="text"
+            placeholder="Número"
+            className="addressNumber"
+            onChange={(e) => props.setNumber(e.target.value)}
+          />
           <input type="text" placeholder="Complemento" />
         </DivForm>
         <DivForm>
@@ -89,24 +103,24 @@ export function DevileveryAdress() {
             type="text"
             placeholder="Bairro"
             className="addressDistric"
-            value={district}
-            onChange={(e) => setDistrict(e.target.value)}
+            value={props.district}
+            onChange={(e) => props.setDistrict(e.target.value)}
           />
           <input
             disabled={cityInputIsActive}
             type="text"
             placeholder="Cidade"
             className="addressCity"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
+            value={props.city}
+            onChange={(e) => props.setCity(e.target.value)}
           />
           <input
             disabled={stateInputIsActive}
             type="text"
             placeholder="UF"
             className="addressUF"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
+            value={props.state}
+            onChange={(e) => props.setState(e.target.value)}
           />
         </DivForm>
       </DeliveryAddressContent>

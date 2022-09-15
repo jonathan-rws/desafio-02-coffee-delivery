@@ -86,6 +86,14 @@ export const SelectAmountInput = styled.div`
   }
 `
 export const CartButton = styled.button`
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
   height: 2.375rem;
   width: 2.375rem;
   display: flex;
@@ -102,5 +110,8 @@ export const CartButton = styled.button`
   }
   svg {
     color: ${(props) => props.theme['base-card']};
+  }
+  svg.loading {
+    animation: spin 3s infinite linear;
   }
 `

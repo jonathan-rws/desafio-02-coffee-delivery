@@ -5,9 +5,24 @@ interface CartItem {
   amount: number
 }
 
+interface Order {
+  id: string
+  street: string
+  number: string
+  city: string
+  state: string
+  district: string
+  complement?: string
+  payment: string
+}
 interface CartContextProps {
-  addToCart: (id: number, amount: number) => void
   cart: CartItem[] | null
+  addToCart: (id: number, amount: number) => void
+  addOrder: (args: Order) => void
+  removeFromCart: (id: number) => void
+  decrementItemFromCart: (id: number) => void
+  incrementItemFromCart: (id: number) => void
+  order: Order | null
 }
 
 interface CartContextProviderProps {
@@ -18,37 +33,91 @@ export const CartContext = createContext({} as CartContextProps)
 
 export function CartContextProvider({ children }: CartContextProviderProps) {
   const [cart, setCart] = useState<CartItem[] | null>(null)
+  const [order, setOrder] = useState<Order | null>(null)
+  console.log(order)
   useEffect(() => {
     async function getStorage() {
-      const data = await localStorage.getItem('deliveryCOffeeCartItems')
+      const data = await localStorage.getItem('deliveryCoffeeCartItems')
       if (data) {
         setCart(JSON.parse(data))
       }
     }
     getStorage()
   }, [])
-  async function addToCart(id: number, amount: number) {
+
+  function addOrder({
+    id,
+    street,
+    number,
+    city,
+    state,
+    district,
+    payment,
+    complement,
+  }: Order) {
+    setOrder({ id, street, number, city, state, district, complement, payment })
+  }
+
+  function addToCart(id: number, amount: number) {
     let newCart = []
     if (!cart) {
       newCart = [{ id, amount }]
     } else {
       const cartIndex = cart.findIndex((item) => item.id === id)
       if (cartIndex !== -1) {
-        const cartArray = cart.map((item) => {
+        newCart = cart.map((item) => {
           return item.id === id
             ? { id: item.id, amount: item.amount + amount }
             : item
         })
-        newCart = cartArray
       } else {
         newCart = [...cart, { id, amount }]
       }
     }
-    localStorage.setItem('deliveryCOffeeCartItems', JSON.stringify(newCart))
+    localStorage.setItem('deliveryCoffeeCartItems', JSON.stringify(newCart))
     setCart(newCart)
   }
+
+  function removeFromCart(id: number) {
+    const newCart = cart?.filter((item) => item.id !== id)
+    if (newCart) {
+      setCart(newCart)
+      localStorage.setItem('deliveryCoffeeCartItems', JSON.stringify(newCart))
+    } else {
+      setCart(null)
+      localStorage.setItem('deliveryCoffeeCartItems', JSON.stringify(null))
+    }
+  }
+
+  function decrementItemFromCart(id: number) {
+    const newCart = cart?.map((item) =>
+      item.id !== id ? item : { id, amount: item.amount - 1 },
+    )
+    newCart && setCart(newCart)
+    localStorage.setItem('deliveryCoffeeCartItems', JSON.stringify(newCart))
+  }
+
+  function incrementItemFromCart(id: number) {
+    console.log('aqui')
+    const newCart = cart?.map((item) =>
+      item.id !== id ? item : { id, amount: item.amount + 1 },
+    )
+    newCart && setCart(newCart)
+    localStorage.setItem('deliveryCoffeeCartItems', JSON.stringify(newCart))
+  }
+
   return (
-    <CartContext.Provider value={{ cart, addToCart }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        decrementItemFromCart,
+        incrementItemFromCart,
+        order,
+        addOrder,
+      }}
+    >
       {children}
     </CartContext.Provider>
   )

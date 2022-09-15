@@ -28,28 +28,51 @@ export const CoffeeTitle = styled.h1`
 export const AmountSection = styled.div`
   display: flex;
   margin-top: 0.5rem;
-  div,
-  button {
-    height: 2rem;
-    padding: 0.5rem;
-    background: ${(props) => props.theme['base-button']};
-    border: none;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    svg {
-      color: ${(props) => props.theme.purple};
-      &.disable {
-        color: ${(props) => props.theme['base-text']};
-        cursor: not-allowed;
-      }
+`
+export const RemoveButton = styled.button`
+  height: 2rem;
+  padding: 0.5rem;
+  background: ${(props) => props.theme['base-button']};
+  border: none;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  svg {
+    color: ${(props) => props.theme.purple};
+    &.disable {
+      color: ${(props) => props.theme['base-text']};
+      cursor: not-allowed;
     }
   }
+`
+export const IncrementAndDecrementBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: ${(props) => props.theme['base-button']};
+  border-radius: 8px;
+
   button {
-    margin-left: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    &:hover {
+      svg {
+        color: ${(props) => props.theme['purple-dark']};
+      }
+    }
+    &:disabled {
+      cursor: not-allowed;
+    }
+    svg {
+      color: ${(props) => props.theme.purple};
+    }
   }
 `
