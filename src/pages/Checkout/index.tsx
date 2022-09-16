@@ -14,7 +14,7 @@ import {
 
 export function Checkout() {
   const navigate = useNavigate()
-  const { addOrder } = useContext(CartContext)
+  const { addOrder, cart, clearCart } = useContext(CartContext)
 
   const [currentCep, setCurrentCep] = useState('')
   const [street, setStreet] = useState('')
@@ -22,24 +22,47 @@ export function Checkout() {
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
   const [number, setNumber] = useState('')
-  const [payment, setPayment] = useState('')
+  const [method, setMethod] = useState<'money' | 'debit' | 'credit' | null>(
+    null,
+  )
   const [loading, setLoading] = useState(false)
   function handleSubmit(e: FormEvent) {
-    setLoading(true)
     e.preventDefault()
+    setLoading(true)
+    if (!currentCep && !street && !number && !district) {
+      alert('Preencha o endereço corretamente')
+      return
+    }
+    if (!method) {
+      alert('Selecione uma forma de pagamento')
+      return
+    }
+    if (cart?.length === 0) {
+      alert('Adicione um produto ao carrinho')
+      return
+    }
     addOrder({
       id: 'blalbal',
       city,
       state,
       district,
       street,
-      payment,
+      method,
       number,
     })
     setTimeout(() => {
       navigate('/orderconfirmation')
       setLoading(false)
+      clearCart()
     }, 2000)
+
+    // setLoading(true)
+    //
+    // if (method && state && city && street && currentCep) {
+
+    // } else if (!method) {
+    //   alert('Selecione o método de pagamento')
+    // }
   }
 
   return (
@@ -60,7 +83,10 @@ export function Checkout() {
           setState={(e: string) => setState(e)}
           setNumber={(e: string) => setNumber(e)}
         />
-        <PaymentMethod />
+        <PaymentMethod
+          setMethod={(event: 'money' | 'debit' | 'credit') => setMethod(event)}
+          method={method}
+        />
       </LeftContainer>
       <RighContainer>
         <TextSubtitle>Cafés selecionados</TextSubtitle>

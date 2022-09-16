@@ -16,7 +16,7 @@ export function Cart({ isLoading }: CartProps) {
     const product = products[products.findIndex((item) => item.id === value.id)]
     return product.priceInCents * value.amount + acc
   }, 0)
-  console.log(cart?.length)
+
   return (
     <CartContainer>
       {cart?.map((item) => {

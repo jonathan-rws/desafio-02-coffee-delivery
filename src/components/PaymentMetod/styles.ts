@@ -35,7 +35,7 @@ export const PaymentContainer = styled.div`
 `
 
 interface MethodPaymentSelectionProps {
-  method: 'money' | 'debit' | 'credit' | null
+  method?: 'money' | 'debit' | 'credit' | null
 }
 export const MethodPaymentSelection = styled.div<MethodPaymentSelectionProps>`
   width: 100%;

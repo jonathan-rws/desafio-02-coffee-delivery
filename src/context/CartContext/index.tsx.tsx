@@ -13,10 +13,11 @@ interface Order {
   state: string
   district: string
   complement?: string
-  payment: string
+  method: 'credit' | 'debit' | 'money' | null
 }
 interface CartContextProps {
   cart: CartItem[] | null
+  clearCart: () => void
   addToCart: (id: number, amount: number) => void
   addOrder: (args: Order) => void
   removeFromCart: (id: number) => void
@@ -34,7 +35,7 @@ export const CartContext = createContext({} as CartContextProps)
 export function CartContextProvider({ children }: CartContextProviderProps) {
   const [cart, setCart] = useState<CartItem[] | null>(null)
   const [order, setOrder] = useState<Order | null>(null)
-  console.log(order)
+
   useEffect(() => {
     async function getStorage() {
       const data = await localStorage.getItem('deliveryCoffeeCartItems')
@@ -52,10 +53,10 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     city,
     state,
     district,
-    payment,
+    method,
     complement,
   }: Order) {
-    setOrder({ id, street, number, city, state, district, complement, payment })
+    setOrder({ id, street, number, city, state, district, complement, method })
   }
 
   function addToCart(id: number, amount: number) {
@@ -98,12 +99,16 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
   }
 
   function incrementItemFromCart(id: number) {
-    console.log('aqui')
     const newCart = cart?.map((item) =>
       item.id !== id ? item : { id, amount: item.amount + 1 },
     )
     newCart && setCart(newCart)
     localStorage.setItem('deliveryCoffeeCartItems', JSON.stringify(newCart))
+  }
+
+  function clearCart() {
+    setCart(null)
+    localStorage.setItem('deliveryCoffeeCartItems', JSON.stringify(null))
   }
 
   return (
@@ -116,6 +121,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         incrementItemFromCart,
         order,
         addOrder,
+        clearCart,
       }}
     >
       {children}

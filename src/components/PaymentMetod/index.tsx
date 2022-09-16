@@ -1,12 +1,12 @@
 import { MethodPaymentSelection, PaymentContainer } from './styles'
 import { CurrencyDollar, CreditCard, Bank, Money } from 'phosphor-react'
-import { useState } from 'react'
 
-export function PaymentMethod() {
-  const [method, setMethod] = useState<'money' | 'debit' | 'credit' | null>(
-    null,
-  )
+interface PaymentMethodProps {
+  method: 'money' | 'debit' | 'credit' | null
+  setMethod: (e: 'money' | 'debit' | 'credit') => void
+}
 
+export function PaymentMethod({ setMethod, method }: PaymentMethodProps) {
   function handleUpdatePaymentMethod(method: 'money' | 'debit' | 'credit') {
     setMethod(method)
   }

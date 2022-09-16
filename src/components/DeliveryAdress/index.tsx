@@ -74,6 +74,7 @@ export function DevileveryAdress(props: DeliveryAdressProps) {
           </div>
         </header>
         <input
+          required
           type="text"
           placeholder="CEP"
           className="addressCEP"
@@ -82,6 +83,7 @@ export function DevileveryAdress(props: DeliveryAdressProps) {
           maxLength={8}
         />
         <input
+          required
           disabled={streetInputIsActive}
           type="text"
           placeholder="Rua"
@@ -90,6 +92,7 @@ export function DevileveryAdress(props: DeliveryAdressProps) {
         />
         <DivForm>
           <input
+            required
             type="text"
             placeholder="Número"
             className="addressNumber"
@@ -99,6 +102,7 @@ export function DevileveryAdress(props: DeliveryAdressProps) {
         </DivForm>
         <DivForm>
           <input
+            required
             disabled={districtInputIsActive}
             type="text"
             placeholder="Bairro"
@@ -107,6 +111,7 @@ export function DevileveryAdress(props: DeliveryAdressProps) {
             onChange={(e) => props.setDistrict(e.target.value)}
           />
           <input
+            required
             disabled={cityInputIsActive}
             type="text"
             placeholder="Cidade"
@@ -115,6 +120,7 @@ export function DevileveryAdress(props: DeliveryAdressProps) {
             onChange={(e) => props.setCity(e.target.value)}
           />
           <input
+            required
             disabled={stateInputIsActive}
             type="text"
             placeholder="UF"

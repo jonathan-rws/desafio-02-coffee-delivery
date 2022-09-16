@@ -8,8 +8,11 @@ import {
 } from './styles'
 
 import motoboyImg from '../../assets/motoboy.svg'
+import { useContext } from 'react'
+import { CartContext } from '../../context/CartContext/index.tsx'
 
 export function OrderConfirmation() {
+  const { order } = useContext(CartContext)
   return (
     <OrderConfirmationContainer>
       <ConfirmationContainer>
@@ -23,9 +26,14 @@ export function OrderConfirmation() {
             </Icon>
             <InformationContainer>
               <span>
-                Entrega em <strong>Rua João Daniel Martineli, 102</strong>
+                Entrega em{' '}
+                <strong>
+                  {order?.street}, {order?.number}
+                </strong>
               </span>
-              <span>Farrapos - Porto Alegre - RS</span>
+              <span>
+                {`${order?.district} - ${order?.city} - ${order?.state}`}
+              </span>
             </InformationContainer>
           </div>
           <div>
@@ -43,7 +51,7 @@ export function OrderConfirmation() {
             </Icon>
             <InformationContainer>
               <span>Pagamento na entrega</span>
-              <strong>Cartão de crédito</strong>
+              <strong>{order?.method}</strong>
             </InformationContainer>
           </div>
         </ConfirmationContent>
